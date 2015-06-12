@@ -1,0 +1,27 @@
+{
+  "name": "action-stream",
+  "description": "A stream library for Model-View-Steram.",
+  "version": "0.0.1",
+  "author": "shigeru.nakajima@gmail.com",
+  "dependencies": {
+    "xtend": "^4.0.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0"
+  },
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "keywords": [
+    "architecture",
+    "client-side",
+    "stream"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
