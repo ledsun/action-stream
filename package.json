@@ -3,6 +3,9 @@
   "description": "A stream library for Model-View-Steram.",
   "version": "0.0.1",
   "author": "shigeru.nakajima@gmail.com",
+  "bugs": {
+    "url": "https://github.com/ledsun/action-stream/issues"
+  },
   "dependencies": {
     "xtend": "^4.0.0"
   },
@@ -14,6 +17,7 @@
     "index.js",
     "lib"
   ],
+  "homepage": "https://github.com/ledsun/action-stream",
   "keywords": [
     "architecture",
     "client-side",
@@ -21,6 +25,10 @@
   ],
   "license": "MIT",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ledsun/action-stream.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
