@@ -33,6 +33,7 @@
     "url": "git@github.com:ledsun/action-stream.git"
   },
   "scripts": {
+    "start": "gulp",
     "test": "mocha --compilers js:espower-babel/guess test"
   }
 }
