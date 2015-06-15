@@ -35,7 +35,11 @@ describe('ActionReadable', () => {
         })
       }
       _write(chunk, encoding, done) {
-        assert(chunk, sampleAction, 'an action is changed')
+        // Copy of an original action is pushed.
+        assert.notEqual(chunk, sampleAction, 'an original action is not changed')
+        assert.equal(chunk.target, sampleAction.target)
+        assert.equal(chunk.type, sampleAction.type)
+        assert.equal(chunk.source, 'ActionReadableSample')
         done()
         mochaDone()
       }
