@@ -22,12 +22,12 @@ class ActionReadableSample extends ActionReadable {
 }
 
 describe('ActionReadable', () => {
-  it('is able to pipe a Writable', (mochaDone) => {
-    let sampleAction = {
-      target: 'any',
-      type: 'some'
-    }
+  let sampleAction = {
+    target: 'any',
+    type: 'some'
+  }
 
+  it('is able to pipe a Writable', (mochaDone) => {
     class WritableStub extends Writable {
       constructor() {
         super({
@@ -44,5 +44,11 @@ describe('ActionReadable', () => {
     let r = new ActionReadableSample()
     r.pipe(new WritableStub())
     r.click(sampleAction)
+  })
+
+  it('throws an exception when pushing to next steram is failed.', () => {
+    let r = new ActionReadableSample()
+    r.click(sampleAction)
+    assert.throws(() => r.click(sampleAction))
   })
 })

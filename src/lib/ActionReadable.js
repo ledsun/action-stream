@@ -13,7 +13,8 @@ export default class extends Readable {
       console.assert(action.type, 'An "action" MUST has the "type" property.')
 
       action.source = [this.name]
-      this.push(action)
+      if (!this.push(action))
+        throw new Error('The stream is clogged.')
     })
   }
   _bindComponent(selector, push) {}
