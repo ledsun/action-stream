@@ -39,4 +39,18 @@ describe('ActionTransform', () => {
       new ActionTransformSample()
     )
   })
+
+  it('throws an exception when pushing to next stream is failed.', (mochaDone) => {
+    class ActionTransformSample extends ActionTransform {
+      constructor() {
+        super()
+      }
+      _transformAction(action, push) {}
+    }
+
+    let ats = new ActionTransformSample()
+
+    ats._transform(sampleAction, '', mochaDone)
+    assert.throws(() => ats._transform(sampleAction, '', mochaDone))
+  })
 })
