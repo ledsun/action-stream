@@ -24,7 +24,8 @@ class ActionReadableSample extends ActionReadable {
 describe('ActionReadable', () => {
   it('is able to pipe a Writable', (mochaDone) => {
     let sampleAction = {
-      a: 'a'
+      target: 'any',
+      type: 'some'
     }
 
     class WritableStub extends Writable {
