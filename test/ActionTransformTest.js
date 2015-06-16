@@ -1,6 +1,7 @@
 import assert from 'power-assert'
 import {
-  Readable
+  Readable,
+  Writable
 }
 from 'stream'
 import {
@@ -54,5 +55,47 @@ describe('ActionTransform', () => {
 
     ats._transform(sampleAction, '', mochaDone)
     assert.throws(() => ats._transform(sampleAction, '', mochaDone))
+  })
+
+  it('is able to pipe a Writable', (mochaDone) => {
+    class ReadableDriver extends Readable {
+      constructor() {
+        super({
+          "objectMode": true
+        })
+
+        this.push(sampleAction)
+      }
+      _read() {}
+    }
+
+    class ActionTransformSample extends ActionTransform {
+      constructor() {
+        super()
+      }
+      _transformAction(action, push) {}
+    }
+
+    class WritableStub extends Writable {
+      constructor() {
+        super({
+          "objectMode": true
+        })
+      }
+      _write(chunk, encoding, done) {
+        // Copy of an original action is pushed.
+        assert.notEqual(chunk, sampleAction, 'an original action is not changed')
+        assert.equal(chunk.target, sampleAction.target)
+        assert.equal(chunk.type, sampleAction.type)
+        assert.equal(chunk.source, 'ReadableDriver')
+        done()
+        mochaDone()
+      }
+    }
+
+    new ReadableDriver()
+      .pipe(new ActionTransformSample())
+      .pipe(new WritableStub())
+
   })
 })
