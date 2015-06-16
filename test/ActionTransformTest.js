@@ -10,7 +10,9 @@ from '../src'
 
 describe('ActionTransform', () => {
   let sampleAction = {
-    source: ['ReadableDriver']
+    source: ['ReadableDriver'],
+    target: 'any',
+    type: 'some'
   }
 
   it('is pipe from Readable', (mochaDone) => {
