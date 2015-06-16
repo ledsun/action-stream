@@ -1,11 +1,11 @@
 import ActionReadable from './lib/ActionReadable'
 import ActionTransform from './lib/ActionTransform'
-import ConsoleDebugStream from './lib/ConsoleDebugStream'
 import FunnelStream from './lib/FunnelStream'
+import TailStream from './lib/TailStream'
 
 export {
   ActionReadable,
   ActionTransform,
-  ConsoleDebugStream,
-  FunnelStream
+  FunnelStream,
+  TailStream
 }

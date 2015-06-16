@@ -5,16 +5,14 @@ from 'stream'
 
 import option from './defaultOption';
 export default class extends Writable {
-  constructor(name) {
+  constructor(debug) {
     super(option)
 
-    this._name = name
-
-    if (!console.debug)
-      console.debug = console.log
+    this._debug = debug
   }
   _write(action, encoding, done) {
-    console.debug(this._name, action);
+    if (this._debug)
+      console.debug('TailStream', action);
     done()
   }
 }
