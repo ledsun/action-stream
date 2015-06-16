@@ -1,6 +1,5 @@
 import assert from 'power-assert'
 import {
-  Readable,
   Writable
 }
 from 'stream'
@@ -8,37 +7,21 @@ import {
   ActionTransform
 }
 from '../src'
+import * as driver from './driver'
 
 describe('ActionTransform', () => {
-  let sampleAction = {
-    source: ['ReadableDriver'],
-    target: 'any',
-    type: 'some'
-  }
-
-  class ReadableDriver extends Readable {
-    constructor() {
-      super({
-        "objectMode": true
-      })
-
-      this.push(sampleAction)
-    }
-    _read() {}
-  }
-
   it('is pipe from Readable', (mochaDone) => {
     class ActionTransformSample extends ActionTransform {
       constructor() {
         super()
       }
       _transformAction(action, push) {
-        assert.equal(action, sampleAction)
+        assert.equal(action, driver.sampleAction)
         mochaDone()
       }
     }
 
-    new ReadableDriver().pipe(
+    new driver.ReadableDriver().pipe(
       new ActionTransformSample()
     )
   })
@@ -53,8 +36,8 @@ describe('ActionTransform', () => {
 
     let ats = new ActionTransformSample()
 
-    ats._transform(sampleAction, '', mochaDone)
-    assert.throws(() => ats._transform(sampleAction, '', mochaDone))
+    ats._transform(driver.sampleAction, '', mochaDone)
+    assert.throws(() => ats._transform(driver.sampleAction, '', mochaDone))
   })
 
   it('is able to pipe a Writable', (mochaDone) => {
@@ -73,16 +56,16 @@ describe('ActionTransform', () => {
       }
       _write(chunk, encoding, done) {
         // Copy of an original action is pushed.
-        assert.notEqual(chunk, sampleAction, 'an original action is not changed')
-        assert.equal(chunk.target, sampleAction.target)
-        assert.equal(chunk.type, sampleAction.type)
+        assert.notEqual(chunk, driver.sampleAction, 'an original action is not changed')
+        assert.equal(chunk.target, driver.sampleAction.target)
+        assert.equal(chunk.type, driver.sampleAction.type)
         assert.equal(chunk.source, 'ReadableDriver')
         done()
         mochaDone()
       }
     }
 
-    new ReadableDriver()
+    new driver.ReadableDriver()
       .pipe(new ActionTransformSample())
       .pipe(new WritableStub())
   })
@@ -112,9 +95,9 @@ describe('ActionTransform', () => {
       }
       _write(chunk, encoding, done) {
         if (this.count === 0) {
-          assert.notEqual(chunk, sampleAction, 'an original action is not changed')
-          assert.equal(chunk.target, sampleAction.target)
-          assert.equal(chunk.type, sampleAction.type)
+          assert.notEqual(chunk, driver.sampleAction, 'an original action is not changed')
+          assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, driver.sampleAction.type)
           assert.equal(chunk.source, 'ReadableDriver')
           this.count++;
           done()
@@ -123,9 +106,9 @@ describe('ActionTransform', () => {
 
         if (this.count === 1) {
           // Remain original values.
-          assert.equal(chunk.target, sampleAction.target)
-          assert.equal(chunk.type, sampleAction.type)
-          // Add source.
+          assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, driver.sampleAction.type)
+            // Add source.
           assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
           assert.equal(chunk.option, 'option1')
           this.count++;
@@ -135,8 +118,8 @@ describe('ActionTransform', () => {
 
         if (this.count === 2) {
           // Push multiple actions.
-          assert.equal(chunk.target, sampleAction.target)
-          assert.equal(chunk.type, sampleAction.type)
+          assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, driver.sampleAction.type)
           assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
           assert.equal(chunk.option, 'option2')
           this.count++;
@@ -147,7 +130,7 @@ describe('ActionTransform', () => {
       }
     }
 
-    new ReadableDriver()
+    new driver.ReadableDriver()
       .pipe(new PushOptionTransform())
       .pipe(new WritableStub())
   })

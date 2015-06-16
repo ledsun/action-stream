@@ -8,29 +8,13 @@ import {
   FunnelStream
 }
 from '../src'
+import * as driver from './driver'
 
 describe('FunnelStream', () => {
-  let sampleAction = {
-    source: ['ReadableDriver'],
-    target: 'any',
-    type: 'some'
-  }
-
-  class ReadableDriver extends Readable {
-    constructor() {
-      super({
-        "objectMode": true
-      })
-
-      this.push(sampleAction)
-    }
-    _read() {}
-  }
-
   it('is able to print log of actions passed throgh.', (mochaDone) => {
     console.debug = (...rest) => {
       assert.equal(rest[0], 'FunnelStream')
-      assert.equal(rest[1], sampleAction)
+      assert.equal(rest[1], driver.sampleAction)
     }
 
     class WritableStub extends Writable {
@@ -41,14 +25,14 @@ describe('FunnelStream', () => {
       }
       _write(chunk, encoding, done) {
         // actions are not changed.
-        assert.equal(chunk, sampleAction, 'an original action is not changed')
-        assert.deepEqual(chunk, sampleAction, 'an original action is not changed')
+        assert.equal(chunk, driver.sampleAction, 'an original action is not changed')
+        assert.deepEqual(chunk, driver.sampleAction, 'an original action is not changed')
         done()
         mochaDone()
       }
     }
 
-    new ReadableDriver()
+    new driver.ReadableDriver()
       .pipe(new FunnelStream(true))
       .pipe(new WritableStub())
   })
@@ -56,7 +40,7 @@ describe('FunnelStream', () => {
   it('throws an exception when pushing to next stream is failed.', (mochaDone) => {
     let fs = new FunnelStream()
 
-    fs._transform(sampleAction, '', mochaDone)
-    assert.throws(() => fs._transform(sampleAction, '', mochaDone))
+    fs._transform(driver.sampleAction, '', mochaDone)
+    assert.throws(() => fs._transform(driver.sampleAction, '', mochaDone))
   })
 })
