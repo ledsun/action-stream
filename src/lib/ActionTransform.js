@@ -14,11 +14,11 @@ export default class extends Transform {
     console.assert(action.target, 'An "action" MUST has the "target" property.')
     console.assert(action.type, 'An "action" MUST has the "type" property.')
 
-    if (!this.push(extend(action)))
-      throw new Error('The stream is clogged.')
-
     let results = []
     this._transformAction(action, results.push.bind(results))
+
+    if (!this.push(extend(action)))
+      throw new Error('The stream is clogged.')
 
     if (results.length > 0) {
       console.assert(this.name, '"Steram" MUST has the name property when push another "action".')

@@ -41,11 +41,15 @@ describe('ActionTransform', () => {
   })
 
   it('is able to pipe a Writable', (mochaDone) => {
+    let _transformActionCalled
+
     class ActionTransformSample extends ActionTransform {
       constructor() {
         super()
       }
-      _transformAction(action, push) {}
+      _transformAction(action, push) {
+        _transformActionCalled = true
+      }
     }
 
     class WritableStub extends Writable {
@@ -55,6 +59,8 @@ describe('ActionTransform', () => {
         })
       }
       _write(chunk, encoding, done) {
+        assert(_transformActionCalled, 'push actions after calling the _transformAction.')
+
         // Copy of an original action is pushed.
         assert.notEqual(chunk, driver.sampleAction, 'an original action is not changed')
         assert.equal(chunk.target, driver.sampleAction.target)
