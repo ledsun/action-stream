@@ -9,8 +9,8 @@ import {
 from '../src'
 
 class ActionReadableSample extends ActionReadable {
-  constructor(selector) {
-    super(selector)
+  constructor(option) {
+    super(null, option)
     this.name = 'ActionReadableSample'
   }
   _bindComponent(selector, push) {
@@ -51,7 +51,9 @@ describe('ActionReadable', () => {
   })
 
   it('throws an exception when pushing to next steram is failed.', () => {
-    let r = new ActionReadableSample()
+    let r = new ActionReadableSample({
+      highWaterMark: 2
+    })
     r.click(sampleAction)
     assert.throws(() => r.click(sampleAction))
   })

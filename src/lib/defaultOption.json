@@ -1,4 +1,4 @@
 {
   "objectMode": true,
-  "highWaterMark": 2
+  "highWaterMark": 4
 }

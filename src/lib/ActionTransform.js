@@ -3,11 +3,11 @@ import {
 }
 from 'stream'
 import extend from 'xtend'
-import option from './defaultOption';
+import defaultOption from './defaultOption';
 
 export default class extends Transform {
-  constructor() {
-    super(option)
+  constructor(option) {
+    super(extend(defaultOption, option))
   }
   _transform(action, encoding, callback) {
     console.assert(Array.isArray(action.source), '"aciton" MUST has the source property as array.')

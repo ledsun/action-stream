@@ -38,9 +38,11 @@ describe('FunnelStream', () => {
   })
 
   it('throws an exception when pushing to next stream is failed.', (mochaDone) => {
-    let fs = new FunnelStream()
+    let fs = new FunnelStream(false, {
+      highWaterMark: 2
+    })
 
     fs._transform(driver.sampleAction, '', mochaDone)
-    assert.throws(() => fs._transform(driver.sampleAction, '', mochaDone))
+    assert.throws(() => fs._transform(driver.sampleAction, '', () => {}))
   })
 })

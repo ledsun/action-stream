@@ -3,11 +3,12 @@ import {
   Readable
 }
 from 'stream'
-import option from './defaultOption';
+import defaultOption from './defaultOption';
 
 export default class extends Readable {
-  constructor(selector) {
-    super(option)
+  constructor(selector, option) {
+    super(extend(defaultOption, option))
+
     this._bindComponent(selector, (action) => {
       console.assert(this.name, '"Steram" MUST has the name property when push an "action".')
       console.assert(action.target, 'An "action" MUST has the "target" property.')

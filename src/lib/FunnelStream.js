@@ -2,11 +2,12 @@ import {
   Transform
 }
 from 'stream'
-import option from './defaultOption';
+import extend from 'xtend'
+import defaultOption from './defaultOption';
 
 export default class extends Transform {
-  constructor(debug) {
-    super(option)
+  constructor(debug, option) {
+    super(extend(defaultOption, option))
 
     this._debug = debug
   }

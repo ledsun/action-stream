@@ -29,7 +29,9 @@ describe('ActionTransform', () => {
   it('throws an exception when pushing to next stream is failed.', (mochaDone) => {
     class ActionTransformSample extends ActionTransform {
       constructor() {
-        super()
+        super({
+          highWaterMark: 2
+        })
       }
       _transformAction(action, push) {}
     }
@@ -37,7 +39,7 @@ describe('ActionTransform', () => {
     let ats = new ActionTransformSample()
 
     ats._transform(driver.sampleAction, '', mochaDone)
-    assert.throws(() => ats._transform(driver.sampleAction, '', mochaDone))
+    assert.throws(() => ats._transform(driver.sampleAction, '', () => {}))
   })
 
   it('is able to pipe a Writable', (mochaDone) => {
