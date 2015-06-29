@@ -35,8 +35,8 @@ export default class extends Transform {
 
     callback()
   }
+  // deprecated function.
   _transformAction(action, push) {
-    throw new Error('not implemented');
   }
   bindAction(target, actionType, callback) {
     if (!this._distpatcher[target])
