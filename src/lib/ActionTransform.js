@@ -8,6 +8,7 @@ import defaultOption from './defaultOption';
 export default class extends Transform {
   constructor(option) {
     super(extend(defaultOption, option))
+    this._distpatcher = new Map()
   }
   _transform(action, encoding, callback) {
     console.assert(Array.isArray(action.source), '"aciton" MUST has the source property as array.')
@@ -15,6 +16,8 @@ export default class extends Transform {
     console.assert(action.type, 'An "action" MUST has the "type" property.')
 
     let results = []
+    if (this._distpatcher[action.target] && this._distpatcher[action.target][action.type])
+      this._distpatcher[action.target][action.type](action, results.push.bind(results))
     this._transformAction(action, results.push.bind(results))
 
     if (!this.push(extend(action)))
@@ -34,5 +37,11 @@ export default class extends Transform {
   }
   _transformAction(action, push) {
     throw new Error('not implemented');
+  }
+  bindAction(target, actionType, callback) {
+    if (!this._distpatcher[target])
+      this._distpatcher[target] = new Map()
+
+    this._distpatcher[target][actionType] = callback
   }
 }
