@@ -74,15 +74,15 @@ export default class extends ActionTransform {
   constructor(model) {
     super()
     this.name = 'ModelStream'
-    this._model = model
-  }
-  _transformAction(action, push) {
-    if (action.target === 'same')
-      if (action.type === 'any')
-        madel.doAnything(action)
+
+    this.bindActions('same', [
+      ['any', (action, push) => madel.doAnything(action)]
+    ])
   }
 }
 ```
+
+例２ Render：
 
 ```js
 import {
@@ -93,17 +93,18 @@ from 'action-stream'
 export default class extends ActionTransform {
   constructor(selector) {
     super()
-    this._component = document.querySelectorAll(selector)
-  }
-  _transformAction(action, push) {
-      if (action.target === 'same')
+    let component = document.querySelectorAll(selector)
+
+    bindActions('same', [
+      ['any', (action, push) => {
         if (action.type === 'any')
           _component.innerHTML = `<div>${action.target}<div>`
+      }]
+    ])
   }
 }
 ```
 
-例３：
 
 ### TailStream
 Steramを終端します。

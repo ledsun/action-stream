@@ -15,10 +15,13 @@ describe('ActionTransform', () => {
     class ActionTransformSample extends ActionTransform {
       constructor() {
         super()
-      }
-      _transformAction(action, push) {
-        assert.equal(action, driver.sampleAction)
-        mochaDone()
+
+        this.bindActions('any', [
+          ['some', (action) => {
+            assert.equal(action, driver.sampleAction)
+            mochaDone()
+          }]
+        ])
       }
     }
 
@@ -34,7 +37,6 @@ describe('ActionTransform', () => {
           highWaterMark: 2
         })
       }
-      _transformAction(action, push) {}
     }
 
     let ats = new ActionTransformSample()
@@ -44,14 +46,15 @@ describe('ActionTransform', () => {
   })
 
   it('is able to pipe a Writable', (mochaDone) => {
-    let _transformActionCalled
+    let _handlerCalled
 
     class ActionTransformSample extends ActionTransform {
       constructor() {
         super()
-      }
-      _transformAction(action, push) {
-        _transformActionCalled = true
+
+        this.bindActions('any', [
+          ['some', () => _handlerCalled = true]
+        ])
       }
     }
 
@@ -62,7 +65,7 @@ describe('ActionTransform', () => {
         })
       }
       _write(chunk, encoding, done) {
-        assert(_transformActionCalled, 'push actions after calling the _transformAction.')
+        assert(_handlerCalled, 'push actions after calling the handler.')
 
         // Copy of an original action is pushed.
         assert.notEqual(chunk, driver.sampleAction, 'an original action is not changed')
@@ -84,14 +87,17 @@ describe('ActionTransform', () => {
       constructor() {
         super()
         this.name = 'PushOptionTransform'
-      }
-      _transformAction(action, push) {
-        push({
-          option: 'option1'
-        })
-        push({
-          option: 'option2'
-        })
+
+        this.bindActions('any', [
+          ['some', (action, push) => {
+            push({
+              option: 'option1'
+            })
+            push({
+              option: 'option2'
+            })
+          }]
+        ])
       }
     }
 
@@ -188,7 +194,6 @@ describe('ActionTransform', () => {
           }]
         ])
       }
-      _transformAction(action, push) {}
     }
 
     class AssertFourthPushWritableStub extends Writable {

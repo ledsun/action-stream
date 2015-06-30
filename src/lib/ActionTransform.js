@@ -21,9 +21,6 @@ export default class extends Transform {
           .forEach(func => func(action, results.push.bind(results)))
     }
 
-    // deprecated function all.
-    this._transformAction(action, results.push.bind(results))
-
     if (!this.push(extend(action)))
       throw new Error('The stream is clogged.')
 
@@ -38,9 +35,6 @@ export default class extends Transform {
     }
 
     callback()
-  }
-  // deprecated function.
-  _transformAction(action, push) {
   }
   bindActions(target, handlers) {
     console.assert(Array.isArray(handlers), '"handlers" MUST be an array.')
