@@ -16,8 +16,12 @@ export default class extends Transform {
     console.assert(action.type, 'An "action" MUST has the "type" property.')
 
     let results = []
-    if (this._distpatcher[action.target] && this._distpatcher[action.target][action.type])
-      this._distpatcher[action.target][action.type](action, results.push.bind(results))
+    if (this._distpatcher[action.target] && this._distpatcher[action.target][action.type]) {
+        this._distpatcher[action.target][action.type]
+          .forEach(func => func(action, results.push.bind(results)))
+    }
+
+    // deprecated function all.
     this._transformAction(action, results.push.bind(results))
 
     if (!this.push(extend(action)))
@@ -38,19 +42,24 @@ export default class extends Transform {
   // deprecated function.
   _transformAction(action, push) {
   }
-  bindAction(target, actionType, handler) {
-    if (!this._distpatcher[target])
-      this._distpatcher[target] = new Map()
-
-    this._distpatcher[target][actionType] = handler
-  }
   bindActions(target, handlers) {
     console.assert(Array.isArray(handlers), '"handlers" MUST be an array.')
     console.assert(handlers.length, '"handlers" MUST contain at least one handler.')
     console.assert(Array.isArray(handlers[0]), '"handlers" MUST has array like [actionType, handler].')
 
     for (let [actionType, handler] of handlers) {
-      this.bindAction(target, actionType, handler)
+      bindAction(this._distpatcher, target, actionType, handler)
     }
+  }
+}
+
+function bindAction(distpatcher, target, actionType, handler) {
+  if (!distpatcher[target])
+    distpatcher[target] = new Map()
+
+  if (!distpatcher[target][actionType]) {
+    distpatcher[target][actionType] = [handler]
+  } else {
+    distpatcher[target][actionType].push(handler)
   }
 }
