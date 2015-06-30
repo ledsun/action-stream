@@ -155,12 +155,12 @@ describe('ActionTransform', () => {
         this.push({
           source: ['ReadableDriver'],
           target: 'any',
-          type: 'some1'
+          type: 'prototype'
         })
         this.push({
           source: ['ReadableDriver'],
           target: 'any',
-          type: 'some2'
+          type: 'delete'
         })
       }
       _read() {}
@@ -171,17 +171,17 @@ describe('ActionTransform', () => {
         super()
         this.name = 'PushOptionTransform'
         this.bindActions('any', [
-          ['some1', (action, push) => {
+          ['prototype', (action, push) => {
             push({
               option: 'option1'
             })
           }],
-          ['some1', (action, push) => {
+          ['delete', (action, push) => {
             push({
               option: 'option2'
             })
           }],
-          ['some2', (aciton, push) => {
+          ['delete', (aciton, push) => {
             push({
               option: 'option3'
             })
@@ -203,7 +203,7 @@ describe('ActionTransform', () => {
         if (this.count === 0) {
           assert.notEqual(chunk, driver.sampleAction, 'an original action is not changed')
           assert.equal(chunk.target, driver.sampleAction.target)
-          assert.equal(chunk.type, 'some1')
+          assert.equal(chunk.type, 'prototype')
           assert.equal(chunk.source, 'ReadableDriver')
           this.count++;
           done()
@@ -213,7 +213,7 @@ describe('ActionTransform', () => {
         if (this.count === 1) {
           // Remain original values.
           assert.equal(chunk.target, driver.sampleAction.target)
-          assert.equal(chunk.type, 'some1')
+          assert.equal(chunk.type, 'prototype')
             // Add source.
           assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
           assert.equal(chunk.option, 'option1')
@@ -225,10 +225,8 @@ describe('ActionTransform', () => {
         if (this.count === 2) {
           // Remain original values.
           assert.equal(chunk.target, driver.sampleAction.target)
-          assert.equal(chunk.type, 'some1')
-            // Add source.
-          assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
-          assert.equal(chunk.option, 'option2')
+          assert.equal(chunk.type, 'delete')
+          assert.equal(chunk.source, 'ReadableDriver')
           this.count++;
           done()
           return
@@ -237,8 +235,10 @@ describe('ActionTransform', () => {
         if (this.count === 3) {
           // Push multiple actions.
           assert.equal(chunk.target, driver.sampleAction.target)
-          assert.equal(chunk.type, 'some2')
-          assert.equal(chunk.source, 'ReadableDriver')
+          assert.equal(chunk.type, 'delete')
+          // Add source.
+          assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
+          assert.equal(chunk.option, 'option2')
           this.count++;
           done()
           return
@@ -247,7 +247,7 @@ describe('ActionTransform', () => {
         if (this.count === 4) {
           // Remain original values.
           assert.equal(chunk.target, driver.sampleAction.target)
-          assert.equal(chunk.type, 'some2')
+          assert.equal(chunk.type, 'delete')
             // Add source.
           assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
           assert.equal(chunk.option, 'option3')

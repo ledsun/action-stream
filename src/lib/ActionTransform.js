@@ -16,8 +16,8 @@ export default class extends Transform {
     console.assert(action.type, 'An "action" MUST has the "type" property.')
 
     let results = []
-    if (this._distpatcher[action.target] && this._distpatcher[action.target][action.type]) {
-        this._distpatcher[action.target][action.type]
+    if (this._distpatcher[action.target] && this._distpatcher[action.target].has(action.type)) {
+        this._distpatcher[action.target].get(action.type)
           .forEach(func => func(action, results.push.bind(results)))
     }
 
@@ -57,9 +57,9 @@ function bindAction(distpatcher, target, actionType, handler) {
   if (!distpatcher[target])
     distpatcher[target] = new Map()
 
-  if (!distpatcher[target][actionType]) {
-    distpatcher[target][actionType] = [handler]
+  if (!distpatcher[target].has(actionType)) {
+    distpatcher[target].set(actionType, [handler])
   } else {
-    distpatcher[target][actionType].push(handler)
+    distpatcher[target].get(actionType).push(handler)
   }
 }
