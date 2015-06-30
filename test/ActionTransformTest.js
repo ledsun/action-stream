@@ -1,6 +1,7 @@
 import assert from 'power-assert'
 import {
-  Writable
+  Writable,
+  Readable
 }
 from 'stream'
 import {
@@ -96,10 +97,10 @@ describe('ActionTransform', () => {
 
     new driver.ReadableDriver()
       .pipe(new PushOptionTransform())
-      .pipe(new AssortDoublePushWritableStub(mochaDone))
+      .pipe(new AssertDoublePushWritableStub(mochaDone))
   })
 
-  it('is able to bind action', (mochaDone) => {
+  it('is able to bind single action', (mochaDone) => {
     class PushOptionTransform extends ActionTransform {
       constructor() {
         super()
@@ -118,10 +119,112 @@ describe('ActionTransform', () => {
 
     new driver.ReadableDriver()
       .pipe(new PushOptionTransform())
-      .pipe(new AssortDoublePushWritableStub(mochaDone))
+      .pipe(new AssertDoublePushWritableStub(mochaDone))
   })
 
-  class AssortDoublePushWritableStub extends Writable {
+  it('is able to bind multi actions', (mochaDone) => {
+      class MultiTypeReadableDriver extends Readable {
+        constructor() {
+          super({
+            "objectMode": true
+          })
+
+          this.push({
+            source: ['ReadableDriver'],
+            target: 'any',
+            type: 'some1'
+          })
+          this.push({
+            source: ['ReadableDriver'],
+            target: 'any',
+            type: 'some2'
+          })
+        }
+        _read() {}
+      }
+
+    class PushOptionTransform extends ActionTransform {
+      constructor() {
+        super()
+        this.name = 'PushOptionTransform'
+        this.bindActions('any', [
+          ['some1', (action, push) => {
+            push({
+              option: 'option1'
+            })
+          }],
+          ['some2', (aciton, push) => {
+            push({
+              option: 'option2'
+            })
+          }]
+        ])
+      }
+      _transformAction(action, push) {}
+    }
+
+    class AssertFourthPushWritableStub extends Writable {
+      constructor(mochaDone) {
+        super({
+          "objectMode": true
+        })
+        this.count = 0
+        this.mochaDone = mochaDone
+      }
+      _write(chunk, encoding, done) {
+        if (this.count === 0) {
+          assert.notEqual(chunk, driver.sampleAction, 'an original action is not changed')
+          assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, 'some1')
+          assert.equal(chunk.source, 'ReadableDriver')
+          this.count++;
+          done()
+          return
+        }
+
+        if (this.count === 1) {
+          // Remain original values.
+          assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, 'some1')
+            // Add source.
+          assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
+          assert.equal(chunk.option, 'option1')
+          this.count++;
+          done()
+          return
+        }
+
+        if (this.count === 2) {
+          // Push multiple actions.
+          assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, 'some2')
+          assert.equal(chunk.source, 'ReadableDriver')
+          this.count++;
+          done()
+          return
+        }
+
+        if (this.count === 3) {
+          // Remain original values.
+          assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, 'some2')
+            // Add source.
+          assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
+          assert.equal(chunk.option, 'option2')
+          this.count++;
+          done()
+        }
+
+        this.mochaDone()
+      }
+    }
+
+    new MultiTypeReadableDriver()
+      .pipe(new PushOptionTransform())
+      .pipe(new AssertFourthPushWritableStub(mochaDone))
+  })
+
+  class AssertDoublePushWritableStub extends Writable {
     constructor(mochaDone) {
       super({
         "objectMode": true
@@ -137,7 +240,7 @@ describe('ActionTransform', () => {
         assert.equal(chunk.source, 'ReadableDriver')
         this.count++;
         done()
-        return;
+        return
       }
 
       if (this.count === 1) {
@@ -149,7 +252,7 @@ describe('ActionTransform', () => {
         assert.equal(chunk.option, 'option1')
         this.count++;
         done()
-        return;
+        return
       }
 
       if (this.count === 2) {

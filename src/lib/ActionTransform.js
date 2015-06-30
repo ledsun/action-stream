@@ -38,10 +38,15 @@ export default class extends Transform {
   // deprecated function.
   _transformAction(action, push) {
   }
-  bindAction(target, actionType, callback) {
+  bindAction(target, actionType, handler) {
     if (!this._distpatcher[target])
       this._distpatcher[target] = new Map()
 
-    this._distpatcher[target][actionType] = callback
+    this._distpatcher[target][actionType] = handler
+  }
+  bindActions(target, handlers) {
+    for (let [actionType, handler] of handlers) {
+      this.bindAction(target, actionType, handler)
+    }
   }
 }
