@@ -45,6 +45,10 @@ export default class extends Transform {
     this._distpatcher[target][actionType] = handler
   }
   bindActions(target, handlers) {
+    console.assert(Array.isArray(handlers), '"handlers" MUST be an array.')
+    console.assert(handlers.length, '"handlers" MUST contain at least one handler.')
+    console.assert(Array.isArray(handlers[0]), '"handlers" MUST has array like [actionType, handler].')
+
     for (let [actionType, handler] of handlers) {
       this.bindAction(target, actionType, handler)
     }
