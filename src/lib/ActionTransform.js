@@ -3,6 +3,7 @@ import {
 }
 from 'stream'
 import extend from 'xtend'
+import Promise from 'bluebird'
 import defaultOption from './defaultOption';
 
 export default class extends Transform {
@@ -17,8 +18,10 @@ export default class extends Transform {
 
     let results = []
     if (this._distpatcher[action.target] && this._distpatcher[action.target].has(action.type)) {
-        this._distpatcher[action.target].get(action.type)
-          .forEach(func => func(action, results.push.bind(results)))
+      this._distpatcher[action.target].get(action.type)
+        .forEach(func => func(action, (newAction) => {
+          results.push(Promise.resolve(newAction))
+        }))
     }
 
     if (!this.push(extend(action)))
@@ -27,11 +30,11 @@ export default class extends Transform {
     if (results.length > 0) {
       console.assert(this.name, '"Steram" MUST has the name property when push another "action".')
 
-      results.forEach(r => {
-        r.source = action.source.concat([this.name])
-        if (!this.push(extend(action, r)))
+      results.forEach(r => r.then(newAction => {
+        newAction.source = action.source.concat([this.name])
+        if (!this.push(extend(action, newAction)))
           throw new Error('The stream is clogged.')
-      })
+      }))
     }
 
     callback()

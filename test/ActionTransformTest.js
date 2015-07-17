@@ -4,6 +4,7 @@ import {
   Readable
 }
 from 'stream'
+import Promise from 'bluebird'
 import {
   ActionTransform
 }
@@ -151,6 +152,70 @@ describe('ActionTransform', () => {
       .pipe(new AssertDoublePushWritableStub(mochaDone))
   })
 
+  it('is able to push promise action', (mochaDone) => {
+    class PushOptionTransform extends ActionTransform {
+      constructor() {
+        super()
+        this.name = 'PushOptionTransform'
+
+        this.bindActions('any', [
+          ['some', (action, push) => {
+            push(new Promise((resolve, reject) => {
+              setTimeout(() => resolve({
+                option: 'option1'
+              }), 0)
+            }))
+
+            push({
+              option: 'option2'
+            })
+          }]
+        ])
+      }
+    }
+
+    class AssertPushPromiseWritableStub extends Writable {
+      constructor(mochaDone) {
+        super({
+          "objectMode": true
+        })
+        this.count = 0
+        this.mochaDone = mochaDone
+      }
+      _write(chunk, encoding, done) {
+        if (this.count === 0) {
+          assert.equal(chunk.source, 'ReadableDriver')
+          this.count++;
+          done()
+          return
+        }
+
+        if (this.count === 1) {
+          // A sync aciton is fast.
+          assert.equal(chunk.option, 'option2')
+          assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
+          this.count++;
+          done()
+          return
+        }
+
+        if (this.count === 2) {
+          // An async aciton is slow.
+          assert.equal(chunk.option, 'option1')
+          assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
+          this.count++;
+          done()
+        }
+
+        this.mochaDone()
+      }
+    }
+
+    new driver.ReadableDriver()
+      .pipe(new PushOptionTransform())
+      .pipe(new AssertPushPromiseWritableStub(mochaDone))
+  })
+
   it('is able to bind multi actions', (mochaDone) => {
     class MultiTypeReadableDriver extends Readable {
       constructor() {
@@ -218,6 +283,16 @@ describe('ActionTransform', () => {
         if (this.count === 1) {
           // Remain original values.
           assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, 'delete')
+          assert.equal(chunk.source, 'ReadableDriver')
+          this.count++;
+          done()
+          return
+        }
+
+        if (this.count === 2) {
+          // Remain original values.
+          assert.equal(chunk.target, driver.sampleAction.target)
           assert.equal(chunk.type, 'prototype')
             // Add source.
           assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
@@ -227,21 +302,11 @@ describe('ActionTransform', () => {
           return
         }
 
-        if (this.count === 2) {
-          // Remain original values.
-          assert.equal(chunk.target, driver.sampleAction.target)
-          assert.equal(chunk.type, 'delete')
-          assert.equal(chunk.source, 'ReadableDriver')
-          this.count++;
-          done()
-          return
-        }
-
         if (this.count === 3) {
           // Push multiple actions.
           assert.equal(chunk.target, driver.sampleAction.target)
           assert.equal(chunk.type, 'delete')
-          // Add source.
+            // Add source.
           assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
           assert.equal(chunk.option, 'option2')
           this.count++;
