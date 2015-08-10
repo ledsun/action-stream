@@ -2,7 +2,8 @@
 Model-View-Streamアーキテクチャー実現のためのライブラリです。
 
 ## うれしさ
-Node.js Stream APIベースのUni-direction data flowアーキテクチャーを実現できます。 記述の面倒さと引き換えに、プレゼンテーションロジックの爆発から解放されますす。
+Node.js Stream APIベースのUni-direction data flowアーキテクチャーを実現できます。
+記述は面倒になりますが、プレゼンテーションロジックを分割したモジュールに共通のAPIを与えられます。
 
 ## 使い方
 ### インストール
@@ -82,7 +83,7 @@ export default class extends ActionTransform {
 }
 ```
 
-例２ Render：
+例2 Render：
 
 ```js
 import {
@@ -129,6 +130,9 @@ export default stream
 コンストラクタの第一引数を`true`にすると、受診するアクションをdebug
 出力します。
 
+## API
+
+https://doc.esdoc.org/github.com/ledsun/action-stream/
 
 ## 開発方法
 ### 準備
