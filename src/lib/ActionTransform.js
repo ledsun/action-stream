@@ -22,12 +22,12 @@ export default class extends Transform {
     console.assert(action.target, 'An "action" MUST has the "target" property.')
     console.assert(action.type, 'An "action" MUST has the "type" property.')
 
-    let results = []
+    let results = [],
+      addResult = (newAction) => results.push(Promise.resolve(newAction))
+
     if (this._distpatcher[action.target] && this._distpatcher[action.target].has(action.type)) {
       this._distpatcher[action.target].get(action.type)
-        .forEach(func => func(action, (newAction) => {
-          results.push(Promise.resolve(newAction))
-        }))
+        .forEach(func => func(action, addResult))
     }
 
     if (!this.push(extend(action)))
@@ -36,19 +36,11 @@ export default class extends Transform {
     if (results.length > 0) {
       console.assert(this.name, '"Steram" MUST has the name property when push another "action".')
 
-      results.forEach(r => r.then(newAction => {
-        // Forwad action to new target when newAction is string.
-        if (typeof newAction === 'string') {
-          newAction = {
-            target: newAction
-          }
-        }
-
-        newAction.source = action.source.concat([this.name])
-
-        if (!this.push(extend(action, newAction)))
-          throw new Error('The stream is clogged.')
-      }))
+      results.forEach(
+        r => r.then(
+          newAction => pushAction(this, action, newAction)
+        )
+      )
     }
 
     callback()
@@ -68,6 +60,20 @@ export default class extends Transform {
       bindAction(this._distpatcher, target, actionType, handler)
     }
   }
+}
+
+function pushAction(self, sourceAction, newAction) {
+  // Forwad action to new target when newAction is string.
+  if (typeof newAction === 'string') {
+    newAction = {
+      target: newAction
+    }
+  }
+
+  newAction.source = sourceAction.source.concat([self.name])
+
+  if (!self.push(extend(sourceAction, newAction)))
+    throw new Error('The stream is clogged.')
 }
 
 function bindAction(distpatcher, target, actionType, handler) {
