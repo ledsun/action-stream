@@ -153,6 +153,56 @@ describe('ActionTransform', () => {
       .pipe(new AssertDoublePushWritableStub(mochaDone))
   })
 
+  it('is able to forward action to anothor target', (mochaDone) => {
+    class ForwardActionTransform extends ActionTransform {
+      constructor() {
+        super()
+        this.name = 'ForwardActionTransform'
+
+        this.bindActions('any', [
+          ['some', (action, push) => push('another target')]
+        ])
+      }
+    }
+
+    class AssertForwardWritableStub extends Writable {
+      constructor(mochaDone) {
+        super({
+          "objectMode": true
+        })
+        this.count = 0
+        this.mochaDone = mochaDone
+      }
+      _write(chunk, encoding, done) {
+        if (this.count === 0) {
+          assert.notEqual(chunk, driver.sampleAction, 'an original action is not changed')
+          assert.equal(chunk.target, driver.sampleAction.target)
+          assert.equal(chunk.type, driver.sampleAction.type)
+          assert.equal(chunk.source, 'ReadableDriver')
+          this.count++;
+          done()
+          return
+        }
+
+        if (this.count === 1) {
+          // Remain original values.
+          assert.equal(chunk.target, 'another target')
+          assert.equal(chunk.type, driver.sampleAction.type)
+            // Add source.
+          assert.deepEqual(chunk.source, ['ReadableDriver', 'ForwardActionTransform'])
+          this.count++;
+          done()
+        }
+
+        this.mochaDone()
+      }
+    }
+
+    new driver.ReadableDriver()
+      .pipe(new ForwardActionTransform())
+      .pipe(new AssertForwardWritableStub(mochaDone))
+  })
+
   it('is able to push promise action', (mochaDone) => {
     class PushOptionTransform extends ActionTransform {
       constructor() {
@@ -170,6 +220,11 @@ describe('ActionTransform', () => {
             push({
               option: 'option2'
             })
+
+            // forward with Promise.
+            push(new Promise((resolve, reject) => {
+              setTimeout(() => resolve('another target'), 0)
+            }))
           }]
         ])
       }
@@ -203,6 +258,14 @@ describe('ActionTransform', () => {
         if (this.count === 2) {
           // An async aciton is slow.
           assert.equal(chunk.option, 'option1')
+          assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
+          this.count++;
+          done()
+          return
+        }
+
+        if (this.count === 3) {
+          assert.equal(chunk.target, 'another target')
           assert.deepEqual(chunk.source, ['ReadableDriver', 'PushOptionTransform'])
           this.count++;
           done()

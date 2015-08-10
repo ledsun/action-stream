@@ -37,7 +37,15 @@ export default class extends Transform {
       console.assert(this.name, '"Steram" MUST has the name property when push another "action".')
 
       results.forEach(r => r.then(newAction => {
+        // Forwad action to new target when newAction is string.
+        if (typeof newAction === 'string') {
+          newAction = {
+            target: newAction
+          }
+        }
+
         newAction.source = action.source.concat([this.name])
+
         if (!this.push(extend(action, newAction)))
           throw new Error('The stream is clogged.')
       }))
@@ -72,6 +80,21 @@ function bindAction(distpatcher, target, actionType, handler) {
     distpatcher[target].get(actionType).push(handler)
   }
 }
+
+/**
+ * Push function is a callback function to push an additional `Action`.
+ * @typedef {function(newAction: object)} PushFunction
+ * @property {string|object|Promise} newAction - 1. A target of an additional `Action` if string.
+ * 1. An additional `Action` if object.
+ * 1. A Promise return An additional `Action` if Promise.
+ */
+
+/**
+ * `Action` handler is a callback function for `Action`.
+ * @typedef {function(action: Action, push: PushFunction)} ActionHandler
+ * @property {Action} action - A recived action.
+ * @property {PushFunction} push - A callback to push an additional `Action`. This supprots `Promise`.
+ */
 
 /**
  * A set of action type and action handlers.
