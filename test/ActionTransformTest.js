@@ -11,6 +11,7 @@ import {
 from '../src'
 import * as driver from './driver'
 
+/** @test {ActionTransform} */
 describe('ActionTransform', () => {
   it('is pipe from Readable', (mochaDone) => {
     class ActionTransformSample extends ActionTransform {

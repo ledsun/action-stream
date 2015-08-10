@@ -5,7 +5,15 @@ import {
 from 'stream'
 import defaultOption from './defaultOption';
 
+/**
+ * Convert events from views to actions.
+ */
 export default class extends Readable {
+  /**
+   * A sub class must set the `name` field.
+   * @param {?string} selector - This is selector to specfy the view.
+   * @param {?object} option - This is passed to the super class.
+   */
   constructor(selector, option) {
     super(extend(defaultOption, option))
 
@@ -22,6 +30,14 @@ export default class extends Readable {
         throw new Error('The stream is clogged.')
     })
   }
+
+  /**
+   * this method must be overridden by sub class.
+   * @protected
+   * @abstract
+   * @param {?string} selector - This is the first parameter of the constructor.
+   * @param {!function(action: Action)} push - A callback function to push a new Action.
+   */
   _bindComponent(selector, push) {}
   _read() {}
 }

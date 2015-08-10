@@ -6,7 +6,13 @@ import extend from 'xtend'
 import Promise from 'bluebird'
 import defaultOption from './defaultOption';
 
+/**
+ * Call models or views according to recived actions.
+ */
 export default class extends Transform {
+  /**
+   * @param {?object} option - this is passed to the super class.
+   */
   constructor(option) {
     super(extend(defaultOption, option))
     this._distpatcher = new Map()
@@ -39,6 +45,12 @@ export default class extends Transform {
 
     callback()
   }
+  /**
+   * Bind calback functions to `Action`s.
+   *
+   * @param {!string} target - The target stream will recive actions.
+   * @param {!ActionBinding[]} - A set of action type and action handlers.
+   */
   bindActions(target, handlers) {
     console.assert(Array.isArray(handlers), '"handlers" MUST be an array.')
     console.assert(handlers.length, '"handlers" MUST contain at least one handler.')
@@ -60,3 +72,10 @@ function bindAction(distpatcher, target, actionType, handler) {
     distpatcher[target].get(actionType).push(handler)
   }
 }
+
+/**
+ * A set of action type and action handlers.
+ * @typedef {Array} ActionBinding
+ * @property {!string} Item[0] - A action type to bind a `ActionHandler`.
+ * @property {!ActionHandler} Item[1] - handlers that has arguments of action and function.
+ */

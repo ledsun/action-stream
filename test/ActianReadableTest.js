@@ -21,6 +21,7 @@ class ActionReadableSample extends ActionReadable {
   }
 }
 
+/** @test {ActionReadable} */
 describe('ActionReadable', () => {
   let sampleAction = {
     target: 'any',

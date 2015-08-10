@@ -10,6 +10,7 @@ import {
 from '../src'
 import * as driver from './driver'
 
+/** @test {FunnelStream} */
 describe('FunnelStream', () => {
   it('is able to print log of actions passed throgh.', (mochaDone) => {
     console.debug = (...rest) => {
