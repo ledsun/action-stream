@@ -13,7 +13,7 @@ import * as driver from './driver'
 /** @test {TailStream} */
 describe('TailStream', () => {
   it('is able to print log of actions passed throgh.', (mochaDone) => {
-    console.debug = (...rest) => {
+    console.log = (...rest) => {
       assert.equal(rest[0], 'TailStream')
       assert.equal(rest[1], driver.sampleAction)
       mochaDone()

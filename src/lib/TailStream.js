@@ -10,7 +10,7 @@ import option from './defaultOption';
  */
 export default class extends Writable {
   /**
-   * @param {?bool} debug - Print out passing actions to console.debug if true.
+   * @param {?bool} debug - Print out passing actions to console.log if true.
    */
   constructor(debug) {
     super(option)
@@ -19,7 +19,7 @@ export default class extends Writable {
   }
   _write(action, encoding, done) {
     if (this._debug)
-      console.debug('TailStream', action);
+      console.log('TailStream', action);
     done()
   }
 }
