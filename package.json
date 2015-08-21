@@ -1,7 +1,7 @@
 {
   "name": "action-stream",
   "description": "A stream library for Model-View-Steram.",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "shigeru.nakajima@gmail.com",
   "bugs": {
     "url": "https://github.com/ledsun/action-stream/issues"
