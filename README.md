@@ -152,3 +152,9 @@ npm start
 ```
 npm test
 ```
+
+### ドキュメント更新
+
+1. [ESDoc Hosting Service](https://doc.esdoc.org/-/generate.html) を開く
+1. `git@github.com:ledsun/action-stream.git` を入力
+1. `Generate` を押下
