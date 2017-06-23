@@ -1,18 +1,33 @@
 # action-stream
-Model-View-Streamアーキテクチャー実現のためのライブラリです。
 
-## うれしさ
-Node.js Stream APIベースのUni-direction data flowアーキテクチャーを実現できます。
-記述は面倒になりますが、プレゼンテーションロジックを分割したモジュールに共通のAPIを与えられます。
+It is a library for realizing **Model - View - Stream** architecture.
 
-## 使い方
-### インストール
+## Purpose
+You can realize the Uni-direction data flow architecture using the Node Stream API.
+Presentation logic can be divided into multiple modules with common API.
+
+All events of user intaraction and model modification are convert as a action objet.
+Actions flow in the stream.
+Modules of this architecture are in the stream.
+They respond to actions that have flowed through the stream.
+
+The amount of source code increases.
+
+## See also
+
+[Model View Streamのご提案 - Qiita](http://qiita.com/ledsun/items/0c27a0bcbd7e738faac1) (Japanese)
+
+## Usage
+### Setup
 `npm install action-stream`
 
-### ActionReadable
-Viewのイベントをアクションに変換する際に使います。
+### Classes
+#### ActionReadable
+It converts View(user intaraction) events to actions and pushes that actions to the stream.
 
-例：
+An action is an object with target property and type property.
+
+example:
 
 ```js
 import {
@@ -37,10 +52,12 @@ export default class extends ActionReadable {
 }
 ```
 
-### FunnelStream
-複数のViewからのアクションを一つのStreamにまとめるために使います。
+#### FunnelStream
 
-例：
+It bundles multiple action streams into the stream.
+
+example:
+
 ```js
 import {
   FunnelStream
@@ -57,13 +74,20 @@ new ActionStream2(selector.EDIT_NODE).pipe(funnel)
 export default funnel
 ```
 
-コンストラクタの第一引数を`true`にすると、通過するアクションをdebug
-出力します。
+If you set the first argument of the constructor to `true`, it output passing actions by `console.log`.
 
-### ActionTransform
-受診したアクションに応じてModelの操作、Viewの操作を行うために使います。
+#### ActionTransform
 
-例1 Model：
+It responds to the action flowing through the stream and modify the Model and View.
+
+##### Example 1 Model
+
+Whether it reacts to an action is distinguished by the action's taget and type.
+
+Specify a target to react to the first argument of bindActions method.
+The second argument to the bindActions method is an array consisting of a pair of type and a function to be executed.
+
+The arguments of the callback function are the received action and the function to flow the action to the stream.
 
 ```js
 import {
@@ -83,7 +107,7 @@ export default class extends ActionTransform {
 }
 ```
 
-例2 Render：
+##### Example 2 View
 
 ```js
 import {
@@ -107,10 +131,10 @@ export default class extends ActionTransform {
 ```
 
 
-### TailStream
-Steramを終端します。
+#### TailStream
+It terminate the stream.
 
-例：
+example:
 ```js
 import {
   TailStream
@@ -127,34 +151,35 @@ stream
 export default stream
 ```
 
-コンストラクタの第一引数を`true`にすると、受診するアクションをdebug
-出力します。
+If you set the first argument of the constructor to `true`, it output received actions by `console.log`.
+You can see all the actions going through the stream.
 
-## API
+
+## API document
 
 https://doc.esdoc.org/github.com/ledsun/action-stream/
 
-## 開発方法
-### 準備
+## For development
+### Setup
 
 ```
 npm install
 ```
 
-### ビルド
+### Build
 
 ```
 npm start
 ```
 
-### テスト
+### Test
 
 ```
 npm test
 ```
 
-### ドキュメント更新
+### Update the API document
 
-1. [ESDoc Hosting Service](https://doc.esdoc.org/-/generate.html) を開く
-1. `git@github.com:ledsun/action-stream.git` を入力
-1. `Generate` を押下
+1. Open [ESDoc Hosting Service](https://doc.esdoc.org/-/generate.html)
+1.  Input `git@github.com:ledsun/action-stream.git`
+1. Push `Generate`
