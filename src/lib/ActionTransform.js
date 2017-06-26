@@ -57,6 +57,8 @@ export default class extends Transform {
     console.assert(Array.isArray(handlers[0]), '"handlers" MUST has array like [actionType, handler].')
 
     for (let [actionType, handler] of handlers) {
+      console.assert(typeof handler === 'function', '"handler" MUST be a function')
+
       bindAction(this._distpatcher, target, actionType, handler)
     }
   }

@@ -31,6 +31,12 @@ describe('ActionTransform', () => {
 
       assert.throws(() => at.bindActions('any', ['some']))
     })
+
+    it('throws error when bind handlers with not function handler', () => {
+      const at = new ActionTransform()
+
+      assert.throws(() => at.bindActions('any', [['some', null]]))
+    })
   })
 
   it('is pipe from Readable', (mochaDone) => {
