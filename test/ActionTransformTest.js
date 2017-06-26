@@ -13,6 +13,26 @@ import * as driver from './driver'
 
 /** @test {ActionTransform} */
 describe('ActionTransform', () => {
+  describe('input check', () => {
+    it('throws error when bind not array handlers', () => {
+      const at = new ActionTransform()
+
+      assert.throws(() => at.bindActions('any', null))
+    })
+
+    it('throws error when bind brank handlers', () => {
+      const at = new ActionTransform()
+
+      assert.throws(() => at.bindActions('any', []))
+    })
+
+    it('throws error when handlers is not nested array', () => {
+      const at = new ActionTransform()
+
+      assert.throws(() => at.bindActions('any', ['some']))
+    })
+  })
+
   it('is pipe from Readable', (mochaDone) => {
     class ActionTransformSample extends ActionTransform {
       constructor() {
