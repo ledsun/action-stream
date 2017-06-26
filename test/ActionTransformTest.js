@@ -84,7 +84,7 @@ describe('ActionTransform', () => {
       .pipe(new WritableStub())
   })
 
-  it('is able to push anothor action', (mochaDone) => {
+  it('is able to push another action', (mochaDone) => {
     class PushOptionTransform extends ActionTransform {
       constructor() {
         super()
@@ -153,7 +153,7 @@ describe('ActionTransform', () => {
       .pipe(new AssertDoublePushWritableStub(mochaDone))
   })
 
-  it('is able to forward action to anothor target', (mochaDone) => {
+  it('is able to forward action to another target', (mochaDone) => {
     class ForwardActionTransform extends ActionTransform {
       constructor() {
         super()
