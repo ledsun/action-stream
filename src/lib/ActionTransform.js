@@ -48,7 +48,7 @@ export default class extends Transform {
    * Bind calback functions to `Action`s.
    *
    * @param {!string} target - The target stream will recive actions.
-   * @param {!ActionBinding[]} - A set of action type and action handlers.
+   * @param {!ActionBinding[]} handlers - A set of action type and action handlers.
    */
   bindActions(target, handlers) {
     console.assert(Array.isArray(handlers), '"handlers" MUST be an array.')
