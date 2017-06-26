@@ -3,7 +3,6 @@ import {
 }
 from 'stream'
 import extend from 'xtend'
-import Promise from 'bluebird'
 import defaultOption from './defaultOption';
 
 /**

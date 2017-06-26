@@ -4,7 +4,6 @@ import {
   Readable
 }
 from 'stream'
-import Promise from 'bluebird'
 import {
   ActionTransform
 }
