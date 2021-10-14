@@ -12,7 +12,6 @@
   "devDependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-plugin-transform-es2015-object-super": "^6.24.1",
     "babel-preset-power-assert": "^1.0.0",
     "babel-register": "^6.24.1",
     "esdoc": "^0.5.2",
