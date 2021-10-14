@@ -3,7 +3,7 @@ import {
 }
 from 'stream'
 import extend from 'xtend'
-import defaultOption from './defaultOption';
+import defaultOption from './defaultOption.mjs';
 
 /**
  * Combine actions from multi views to one Steram.

@@ -3,7 +3,7 @@ import {
 }
 from 'stream'
 
-import option from './defaultOption';
+import option from './defaultOption.mjs';
 
 /**
  * Terminate streams.

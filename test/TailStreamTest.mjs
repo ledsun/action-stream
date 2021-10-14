@@ -7,8 +7,8 @@ from 'stream'
 import {
   TailStream
 }
-from '../src'
-import * as driver from './driver'
+from '../src/index.mjs'
+import * as driver from './driver.mjs'
 
 /** @test {TailStream} */
 describe('TailStream', () => {

@@ -7,8 +7,8 @@ from 'stream'
 import {
   ActionTransform
 }
-from '../src'
-import * as driver from './driver'
+from '../src/index.mjs'
+import * as driver from './driver.mjs'
 
 /** @test {ActionTransform} */
 describe('ActionTransform', () => {

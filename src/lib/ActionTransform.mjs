@@ -3,7 +3,7 @@ import {
 }
 from 'stream'
 import extend from 'xtend'
-import defaultOption from './defaultOption';
+import defaultOption from './defaultOption.mjs';
 
 /**
  * Call models or views according to recived actions.

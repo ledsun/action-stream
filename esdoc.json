@@ -1,6 +1,7 @@
 {
   "source": "./src",
   "destination": "./esdoc",
+  "includes": ["\\.mjs$"],
   "plugins": [
     {
       "name": "esdoc-standard-plugin",
@@ -8,7 +9,7 @@
         "test": {
           "source": "./test/",
           "interfaces": ["describe", "it", "context", "suite", "test"],
-          "includes": ["(spec|Spec|test|Test)\\.js$"],
+          "includes": ["(spec|Spec|test|Test)\\.mjs$"],
           "excludes": ["\\.config\\.js$"]
         }
       }

@@ -18,7 +18,7 @@
     "esdoc-standard-plugin": "^1.0.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^6.1.2",
-    "mocha": "^3.4.2",
+    "mocha": "^9.1.2",
     "power-assert": "^1.4.4"
   },
   "files": [
@@ -40,6 +40,6 @@
   "scripts": {
     "doc": "esdoc -c esdoc.json",
     "start": "gulp",
-    "test": "mocha --compilers js:babel-register test"
+    "test": "mocha test/*.mjs"
   }
 }

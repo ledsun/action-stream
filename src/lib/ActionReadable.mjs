@@ -3,7 +3,7 @@ import {
   Readable
 }
 from 'stream'
-import defaultOption from './defaultOption';
+import defaultOption from './defaultOption.mjs';
 
 /**
  * Convert events from views to actions.
