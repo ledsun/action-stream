@@ -7,7 +7,7 @@
     "url": "https://github.com/ledsun/action-stream/issues"
   },
   "dependencies": {
-    "xtend": "^4.0.1"
+    "xtend": "^4.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
