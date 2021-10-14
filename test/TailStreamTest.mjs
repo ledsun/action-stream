@@ -7,7 +7,7 @@ from 'stream'
 import {
   TailStream
 }
-from '../src/index.mjs'
+from '../index.mjs'
 import * as driver from './driver.mjs'
 
 /** @test {TailStream} */

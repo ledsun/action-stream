@@ -7,7 +7,7 @@ from 'stream'
 import {
   FunnelStream
 }
-from '../src/index.mjs'
+from '../index.mjs'
 import * as driver from './driver.mjs'
 
 /** @test {FunnelStream} */

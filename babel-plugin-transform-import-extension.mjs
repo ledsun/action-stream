@@ -10,7 +10,7 @@ export default function (babel) {
                 const source = declaration.get("source");
                 source.replaceWith(
                   types.stringLiteral(
-                    source.node.value.replace(/\.mjs$/, ".js")
+                    source.node.value.replace(/\.mjs$/, ".cjs")
                   )
                 );
               },

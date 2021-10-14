@@ -1,7 +1,8 @@
 {
-  "source": "./src",
+  "source": ".",
   "destination": "./esdoc",
   "includes": ["\\.mjs$"],
+  "excludes": ["(node_modules|esdocs|test|babel-plugin-transform-import-extension)"],
   "plugins": [
     {
       "name": "esdoc-standard-plugin",

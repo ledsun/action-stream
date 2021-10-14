@@ -7,7 +7,7 @@ from 'stream'
 import {
   ActionTransform
 }
-from '../src/index.mjs'
+from '../index.mjs'
 import * as driver from './driver.mjs'
 
 /** @test {ActionTransform} */

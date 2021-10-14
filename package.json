@@ -20,7 +20,8 @@
     "power-assert": "^1.6.1"
   },
   "files": [
-    "index.js",
+    "index.cjs",
+    "index.mjs",
     "lib"
   ],
   "homepage": "https://github.com/ledsun/action-stream",
@@ -30,14 +31,18 @@
     "stream"
   ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "index.cjs",
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.cjs"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:ledsun/action-stream.git"
   },
   "scripts": {
     "doc": "esdoc -c esdoc.json",
-    "start": "babel src --extensions '.mjs'  -d .",
+    "start": "babel . --extensions '.mjs' -d . --out-file-extension '.cjs'",
     "test": "mocha test/*.mjs"
   }
 }

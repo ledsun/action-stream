@@ -6,7 +6,7 @@ from 'stream'
 import {
   ActionReadable
 }
-from '../src/index.mjs'
+from '../index.mjs'
 
 class ActionReadableSample extends ActionReadable {
   constructor(option) {

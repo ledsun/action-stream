@@ -1,4 +1,4 @@
 node_modules/
-/index.js
 /esdoc/
-/lib/
+lib/*.cjs
+index.cjs
