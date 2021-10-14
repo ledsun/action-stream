@@ -19,6 +19,13 @@
     "mocha": "^9.1.2",
     "power-assert": "^1.6.1"
   },
+  "engines": {
+    "node": ">=14.17.0"
+  },
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.cjs"
+  },
   "files": [
     "index.cjs",
     "index.mjs",
@@ -32,10 +39,6 @@
   ],
   "license": "MIT",
   "main": "index.cjs",
-  "exports": {
-    "import": "./index.mjs",
-    "require": "./index.cjs"
-  },
   "repository": {
     "type": "git",
     "url": "git@github.com:ledsun/action-stream.git"
