@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-add-module-exports": "^1.0.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
