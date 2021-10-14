@@ -16,7 +16,7 @@
     "babel-preset-power-assert": "^1.0.0",
     "babel-register": "^6.24.1",
     "esdoc": "^0.5.2",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-babel": "^6.1.2",
     "mocha": "^3.4.2",
     "power-assert": "^1.4.4"
