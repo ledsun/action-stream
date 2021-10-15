@@ -1,4 +1,4 @@
-import assert from 'power-assert'
+import assert from 'assert'
 import {
   Writable,
   Readable
@@ -12,32 +12,6 @@ import * as driver from './driver.mjs'
 
 /** @test {ActionTransform} */
 describe('ActionTransform', () => {
-  describe('input check', () => {
-    it('throws error when bind not array handlers', () => {
-      const at = new ActionTransform()
-
-      assert.throws(() => at.bindActions('any', null))
-    })
-
-    it('throws error when bind brank handlers', () => {
-      const at = new ActionTransform()
-
-      assert.throws(() => at.bindActions('any', []))
-    })
-
-    it('throws error when handlers is not nested array', () => {
-      const at = new ActionTransform()
-
-      assert.throws(() => at.bindActions('any', ['some']))
-    })
-
-    it('throws error when bind handlers with not function handler', () => {
-      const at = new ActionTransform()
-
-      assert.throws(() => at.bindActions('any', [['some', null]]))
-    })
-  })
-
   it('is pipe from Readable', (mochaDone) => {
     class ActionTransformSample extends ActionTransform {
       constructor() {
