@@ -4,7 +4,6 @@
     "babel-plugin-transform-import-extension.mjs"
   ],
   "plugins": [
-    "add-module-exports",
     "@babel/plugin-transform-modules-commonjs",
     "./babel-plugin-transform-import-extension.mjs"
   ]
