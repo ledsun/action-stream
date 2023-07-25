@@ -154,11 +154,6 @@ export default stream
 If you set the first argument of the constructor to `true`, it output received actions by `console.log`.
 You can see all the actions going through the stream.
 
-
-## API document
-
-https://doc.esdoc.org/github.com/ledsun/action-stream/
-
 ## For development
 ### Setup
 
@@ -177,9 +172,3 @@ npm start
 ```
 npm test
 ```
-
-### Update the API document
-
-1. Open [ESDoc Hosting Service](https://doc.esdoc.org/-/generate.html)
-1.  Input `git@github.com:ledsun/action-stream.git`
-1. Push `Generate`
